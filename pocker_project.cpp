@@ -717,7 +717,7 @@ int main()
         beggining_of_the_game(players, pot, number_of_players);
 
         while (!all_players_has_called(players, number_of_players) && (!just_one_player_left(players, number_of_players))) {
-
+            int raise = 0;
             
 
             for (int i = 0;i < number_of_players;i++) {
@@ -737,26 +737,34 @@ int main()
                         std::cin >> decision;
                     }
                     bool able_to_raise = true;
-                    int raise = 0;
+                    
                     if (decision == 'r') {
+                        raise = 0;
                         validation_raise(raise, last_bet, players, number_of_players, i, able_to_raise);
-                        if (able_to_raise) {
+                       /* if (able_to_raise) {
                             given_raise(number_of_players, players, raise, pot);
-                        }
+                        }*/
+                        players[i].given_virtual_points += raise;
+                        players[i].balance -= raise; 
+                        pot += raise;
                         status_of_players(number_of_players, players, raise, pot);
                     }
                     else if (decision == 'f') {
                         players[i].is_playing = false;
                     }
                     else {
-                        players[i].has_called = true;
-                        /*if (raise > players[i].given_virtual_points) {
-                            
+                        std::cout<<raise<<' ' << players[i].given_virtual_points << '\n';
+                        if (raise > players[i].given_virtual_points) {
+                            players[i].has_called = true;
+                            players[i].given_virtual_points += raise;
+                            players[i].balance -= raise;
+                            pot += raise;
 
                         }
                         else {
-                            std::cout << "You can not call!" << '\n';
-                        }*/
+                            std::cout << "You can not call!" <<players[i].given_virtual_points<<'\n';
+                            players[i].is_playing = false;
+                        }
                         //std::cout << all_players_has_called(players, number_of_players);
                     }
                     last_bet = raise;
