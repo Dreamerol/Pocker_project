@@ -357,7 +357,9 @@ void beggining_of_the_game(player players[], int& pot, int number_of_players) {
             if (players[i].balance >= CHIP_VALUE) {
                 players[i].balance -= CHIP_VALUE;
                 pot += CHIP_VALUE;
-                players[i].given_virtual_points += CHIP_VALUE;
+                players[i].given_virtual_points = CHIP_VALUE;
+                /*players[i].given_virtual_points += CHIP_VALUE;
+                players[i].given_virtual_points = 0;*/
             }
             else {
                 players[i].is_playing = false;
@@ -531,6 +533,7 @@ void joining_the_tie(player players[], int& pot, int number_of_players) {
                 }
                 else {
                     players[i].balance -= value_to_pay_to_join_the_tie;
+                    players[i].is_playing = true;
                 }
             }
             else {
@@ -631,6 +634,7 @@ int main()
         }
         bool is_tie_flag = false;
        int pot = 0;
+       int count = 0;
     while (another_game) {
         int last_bet = 0;
         if (not_first_game) {
@@ -649,6 +653,7 @@ int main()
             //last_bet = 0;
         }
         if (is_tie_flag) {
+            
             int indexes[NUMBER_OF_ALL_CARDS];
             int len_indexes = 0;
             for (int i = 0;i < number_of_players;i++) {
@@ -687,7 +692,7 @@ int main()
 
 
 
-            //Now we are going to evaluate the result - count of points
+        //Now we are going to evaluate the result - count of points
         for (int i = 0;i < number_of_players;i++)
         {
             if (players[i].is_playing) {
@@ -695,6 +700,23 @@ int main()
             }
         }
 
+        /*if (count == 0) {
+            for (int i = 0;i < number_of_players;i++)
+            {
+                if (players[i].is_playing) {
+                    players[i].result = 10;
+                }
+            }
+            players[0].result = 9;
+        }
+        else {
+            for (int i = 0;i < number_of_players;i++)
+            {
+                if (players[i].is_playing) {
+                    players[i].result = i;
+                }
+            }
+        }*/
 
         
         for (int i = 0;i < number_of_players;i++) {
@@ -718,7 +740,7 @@ int main()
 
         while (!all_players_has_called(players, number_of_players) && (!just_one_player_left(players, number_of_players))) {
             int raise = 0;
-            
+           
 
             for (int i = 0;i < number_of_players;i++) {
                 if (just_one_player_left(players, number_of_players) || all_players_has_called(players, number_of_players)) {
@@ -773,10 +795,13 @@ int main()
             }
         }
         if (is_tie(players, number_of_players)) {
-            joining_the_tie(players, pot, number_of_players);
             std::cout << "IT IS A TIE :)" << '\n';
+            joining_the_tie(players, pot, number_of_players);
+          
             is_tie_flag = true;
-
+            //another_game = true;
+            count = 1;
+            
 
         }
         
