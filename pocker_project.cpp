@@ -583,6 +583,13 @@ void restart_players_status(player players[], int number_of_players) {
         }
     }
 }
+void restart_players_status_when_tie(player players[], int number_of_players) {
+    for (int i = 0;i < number_of_players;i++) {
+        if (players[i].is_playing) {
+            players[i].has_called = false;
+        }
+    }
+}
 //---------------------------------------------------------------------------------------------------------------
 
 int main()
@@ -662,6 +669,7 @@ int main()
                 }
             }
             is_tie_flag = false;
+            restart_players_status_when_tie(players, number_of_players);
         }
         /*for (int i = 0;i < number_of_players;i++) {
             if (players[i].is_playing) {
@@ -700,7 +708,7 @@ int main()
             }
         }
 
-        /*if (count == 0) {
+       /* if (count == 0) {
             for (int i = 0;i < number_of_players;i++)
             {
                 if (players[i].is_playing) {
