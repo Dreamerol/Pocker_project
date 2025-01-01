@@ -1,5 +1,6 @@
 PROJECT POCKER 10
 I use Visual Studio
+
 I have one main cpp file with all the functions for the program.
 The project is about playing simple poker, so I decided to arrange the functionality into few sections:
 1.I create structs which represent a card and a player.
