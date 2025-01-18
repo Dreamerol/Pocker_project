@@ -1,4 +1,20 @@
+/**
+*
+* Solution to course project # 10
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2024/2025
+*
+* @author Mihaela Lachezareva Koseva
+* @idnumber 6MI0600443
+* @compiler VC / Visual Studio
+*
+* <main file with the functions, used for the project>
+*
+*/
 
+//LINK GITHUB
+// https://github.com/Dreamerol/Pocker_project
 //#include "Functions.h"
 #include <stdio.h>
 #include <conio.h>
@@ -19,7 +35,7 @@ int const MAX_NUMBER_OF_PLAYERS = 9;
 int const MAX_GAINED_MONEY = 3 * 100 * CHIP_VALUE; // the count of all chips in the game
 
 //I created constants with some of the types or suits of cards so to avoid using magical numbers in the code
-int const ACE = 14;
+int const ACE = 14; // number of ace card
 int const SEVEN = 7;
 char const CLUBS = 'C';
 int const SEVEN_CLUBS = 11; //the points of the card seven clubs
@@ -128,6 +144,7 @@ void swap_players(player& a, player& b) {
 }
 
 //Selection Sort functions
+//I sort the cards as objects based on their suit or type
 void sort_by_number(card cards_in_hand[]) {
     for (int i = 0;i < NUMBER_OF_CARDS_IN_A_HAND - 1;i++) {
         int min_idx = i;
@@ -181,6 +198,7 @@ bool three_equal_cards(card cards_in_hand[]) {
     }
     return 1;
 }
+//checks if the player has three equal suits
 bool three_equal_suits(card cards_in_hand[]) {
     sort_by_suit(cards_in_hand);
     for (int i = 0;i < NUMBER_OF_CARDS_IN_A_HAND - 1;i++) {
@@ -191,19 +209,14 @@ bool three_equal_suits(card cards_in_hand[]) {
     }
     return 1;
 }
-
+//checks if the player has two equal cards/suits
 bool two_equal_suits(card cards_in_hand[]) {
     sort_by_suit(cards_in_hand);
     return(cards_in_hand[1].suit == cards_in_hand[0].suit || cards_in_hand[1].suit == cards_in_hand[2].suit);
 
 }
 
-//bool two_equal_numbers_one(card cards_in_hand[]) {
-//    sort_by_number(cards_in_hand);
-//    return(cards_in_hand[1].number == cards_in_hand[0].number || cards_in_hand[1].number == cards_in_hand[2].number);
-//
-//
-//}
+
 bool two_equal_cards(card cards_in_hand[], int card_type) {
     int count = 0;
     for (int i = 0;i < NUMBER_OF_CARDS_IN_A_HAND;i++)
@@ -248,7 +261,7 @@ char int_to_card_type_converter(int card) {
         return 'A';
     }
 }
-
+//checks whether the player has seven clubs in his hand
 bool seven_clubs_in_hand(card cards_in_hand[])
 {
     for (int i = 0;i < NUMBER_OF_CARDS_IN_A_HAND;i++)
@@ -276,7 +289,7 @@ bool two_equal_suits_seven_clubs(card cards_in_hand[]) {
     return (cards_in_hand[1].suit == cards_in_hand[2].suit);
 }
 
-
+//returns the biggest card
 int max_card(card cards_in_hand[]) {
     sort_by_number(cards_in_hand);
     return cards_in_hand[2].number;
@@ -376,6 +389,7 @@ bool raise_bigger_than_players_balance(player players[], int number_of_players, 
 }
 
 //in the beginning of every game - all the players give 1 CHIP, so we need to substract CHIP_VALUE from their balances
+//Also we add the CHIP_VALUE to their virtual_points
 void beggining_of_the_game(player players[], int& pot, int number_of_players) {
     for (int i = 0;i < number_of_players;i++) {
         if (players[i].is_playing) {
@@ -440,6 +454,7 @@ bool all_players_has_called(player players[], int number_of_players) {
     }
     return 1;
 }
+//Or just one player has left in the game
 bool just_one_player_left(player players[], int number_of_players) {
     int count = 0;
     for (int i = 0;i < number_of_players;i++) {
@@ -451,7 +466,7 @@ bool just_one_player_left(player players[], int number_of_players) {
     return (count == 1);
 }
 
-
+//Finding the winner based on the result
 //calculating the max result
 int max_result(player players[], int number_of_players) {
     int max = players[0].result;
@@ -481,7 +496,7 @@ bool is_tie(player players[], int number_of_players) {
     for (int i = 0;i < number_of_players;i++) {
         if (max == players[i].result) count++;
     }
-    return (count > 1);
+    return (count > 1);//if there are more than one person with a ax result
 }
 
 
@@ -634,6 +649,7 @@ int main() {
 
 
     std::cout << "WELCOME TO FMI CASINO!" << '\n';
+    std::cout << "Are you tired of Mathematics? Why don't you try becoming a billionaire! ;)";
     std::cout << "Who is going to be the next billionaire? It's time to find out!" << '\n';
 
 
@@ -744,7 +760,7 @@ int main() {
 
 
 
-            //Now we are going to evaluate the result - count of points
+        //Now we are going to evaluate the result - count of points
         for (int i = 0;i < number_of_players;i++)
         {
             if (players[i].is_playing) {
@@ -774,13 +790,14 @@ int main() {
          }*/
 
 
-        for (int i = 0;i < number_of_players;i++) {
+       //Printing the  cards of the players
+      /*  for (int i = 0;i < number_of_players;i++) {
             if (players[i].is_playing)
                 for (int j = 0;j < 3;j++) {
                     std::cout << players[i].cards_in_hand[j].number << " " << players[i].cards_in_hand[j].suit << '\n';
                 }
             std::cout << players[i].result << '\n';
-        }
+        }*/
 
 
 
@@ -790,7 +807,7 @@ int main() {
           }
           std::cout << pot;*/
 
-          //Now it's time to begin the game
+         //Now it's time to begin the game
         beggining_of_the_game(players, pot, number_of_players);
 
         //we are playing until one player is left or all the players have called
@@ -835,7 +852,8 @@ int main() {
                         players[i].is_playing = false;
                     }
                     else {
-                        std::cout << raise << ' ' << players[i].given_virtual_points << '\n';
+
+                        //std::cout << raise << ' ' << players[i].given_virtual_points << '\n';
                         if (raise > players[i].given_virtual_points) {
                             //A player can call if the given raise is bigger than the given_virtual_points of the player
                             players[i].has_called = true;
@@ -883,7 +901,7 @@ int main() {
                     std::cout << players[max_idx].cards_in_hand[i].number;
 
                 }
-                //printing the winner's cards in a hand
+                //printing the winner's cards combination
                 std::cout << players[max_idx].cards_in_hand[i].suit << ' ';
             }
             //His reult
