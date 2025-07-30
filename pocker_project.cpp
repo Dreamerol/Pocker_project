@@ -751,7 +751,7 @@ int main() {
         {
             if (players[i].is_playing) {
                 players[i].result = result_of_points(players[i].cards_in_hand);
-                std::cout<<players[i].result<<'\n';
+                //std::cout<<players[i].result<<'\n';
             }
         }
 
@@ -801,7 +801,6 @@ int main() {
         //we are playing until one player is left or all the players have called
         while (!all_players_has_called(players, number_of_players) && (!just_one_player_left(players, number_of_players))) {
             int raise = 0;
-            std::cout<<is_tie(players, number_of_players)<<'\n';
 
             for (int i = 0;i < number_of_players;i++) {
                 //we move through the players and ask each one of them - r, c, f
