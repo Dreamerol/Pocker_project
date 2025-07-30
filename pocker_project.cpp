@@ -362,6 +362,7 @@ void validation_number_of_players(int& number_of_players) {
         std::cout << "You should enter a number between 2 and 9! ";
         std::cin >> number_of_players;
     }
+   
 }
 
 //validation for entering an answer, when the player can't raise - it should be c - call or f - fold
@@ -469,10 +470,11 @@ bool just_one_player_left(player players[], int number_of_players) {
 //Finding the winner based on the result
 //calculating the max result
 int max_result(player players[], int number_of_players) {
-    int max = players[0].result;
-    for (int i = 1;i < number_of_players;i++) {
+    int max = 0;
+    for (int i = 0;i < number_of_players;i++) {
+        if(players[i].is_playing){
         if (max < players[i].result) max = players[i].result;
-    }
+    }}
     return max;
 }
 //returns the idx of the player with max result
@@ -494,9 +496,9 @@ bool is_tie(player players[], int number_of_players) {
     int max = max_result(players, number_of_players);
     int count = 0;
     for (int i = 0;i < number_of_players;i++) {
-        if (max == players[i].result) count++;
+        if (max == players[i].result && players[i].is_playing) count++;
     }
-    return (count > 1);//if there are more than one person with a ax result
+    return (count > 1);//if there are more than one person with a max result
 }
 
 
@@ -616,6 +618,9 @@ void do_you_want_to_play_again(char& answer) {
 void write_results_in_file(player players[], int number_of_players) {
     sort_by_balance(players, number_of_players);
     std::ofstream MyFile("results.txt");
+    if(!MyFile.is_open()){
+        std::cerr<<"Cannot open file!";
+    }
     for (int i = number_of_players - 1;i >= 0;i--) {
         MyFile << "Player" << players[i].id << " with balance " << players[i].balance << "!" << '\n';
     }
@@ -649,7 +654,7 @@ int main() {
 
 
     std::cout << "WELCOME TO FMI CASINO!" << '\n';
-    std::cout << "Are you tired of Mathematics? Why don't you try becoming a billionaire! ;)";
+    std::cout << "Are you tired of Mathematics? Why don't you try becoming a billionaire! ;)"<<'\n';
     std::cout << "Who is going to be the next billionaire? It's time to find out!" << '\n';
 
 
@@ -663,6 +668,7 @@ int main() {
             idx_of_deck++;
         }
     }
+    //printing the cards of the players
     /* for (int i = 0;i < idx_of_deck;i++) {
          std::cout << deck[i].number << " " << deck[i].suit<<'\n';
      }
@@ -674,7 +680,7 @@ int main() {
     validation_number_of_players(number_of_players);
     
  
-    player players[MAX_NUMBER_OF_PLAYERS];
+    player* players = new player[number_of_players];
     int indexes[NUMBER_OF_ALL_CARDS];
     int len_indexes = 0;
     for (int i = 0;i < number_of_players;i++)
@@ -693,7 +699,7 @@ int main() {
     while (another_game)
     {
         int last_bet = 0;
-        //This is the case , when the user has asked for another game
+        //This is the case, when the user has asked for another game
         if (not_first_game) {
             pot = 0;
             //len_indexes = 0
@@ -704,7 +710,7 @@ int main() {
             //we restart the status - players with balance > 0 - is_playing = true;
             restart_players_status(players, number_of_players);
             for (int i = 0;i < number_of_players;i++) {
-                std::cout << players[i].is_playing << " " << players[i].balance << '\n';
+                std::cout << "Player" <<i + 1<< " " << players[i].balance << '\n';
             }
             //we deal them new three cards
             for (int i = 0;i < number_of_players;i++) {
@@ -731,40 +737,21 @@ int main() {
             //we restart the players' status - those who are still in the game
             restart_players_status_when_tie(players, number_of_players);
         }
-        /*for (int i = 0;i < number_of_players;i++) {
+        //Printing players' cards
+       /* for (int i = 0;i < number_of_players;i++) {
             if (players[i].is_playing) {
                 for (int j = 0;j < 3;j++) {
                     std::cout << players[i].cards_in_hand[j].number << " " << players[i].cards_in_hand[j].suit << '\n';
                 }
             }
-        }*/
-        /*for (int h = 0;h < number_of_players;h++) {
-            for (int i = 0;i < 3;i++) {
-                std::cout << players[h].cards_in_hand[i].number << ' ' << players[h].cards_in_hand[i].suit << '\n';
-            }
-        }*/
-
-        /* for (int i = 0;i < 3;i++) {
-                std::cout << players[0].cards_in_hand[i].number << ' '<< players[0].cards_in_hand[i].suit<<'\n';
-            }*/
-            /*sort_by_suit(players[1].cards_in_hand);
-            for (int i = 0;i < 3;i++) {
-                std::cout<<players[1].cards_in_hand[i].number <<' '<< players[1].cards_in_hand[i].suit << '\n';
-            }*/
-
-
-            //std::cout << pocker_player.cards_in_hand[0];
-            /*for (int h = 0;h < 3;h++) {
-                std::cout<<players[i].cards_in_hand[h].number<<' '<< players[i].cards_in_hand[h].suit<<'\n';
-            }*/
-
-
-
+        }
+        */
         //Now we are going to evaluate the result - count of points
         for (int i = 0;i < number_of_players;i++)
         {
             if (players[i].is_playing) {
                 players[i].result = result_of_points(players[i].cards_in_hand);
+                std::cout<<players[i].result<<'\n';
             }
         }
 
@@ -790,7 +777,7 @@ int main() {
          }*/
 
 
-       //Printing the  cards of the players
+       //Printing the cards of the players
       /*  for (int i = 0;i < number_of_players;i++) {
             if (players[i].is_playing)
                 for (int j = 0;j < 3;j++) {
@@ -809,11 +796,12 @@ int main() {
 
          //Now it's time to begin the game
         beggining_of_the_game(players, pot, number_of_players);
+        
 
         //we are playing until one player is left or all the players have called
         while (!all_players_has_called(players, number_of_players) && (!just_one_player_left(players, number_of_players))) {
             int raise = 0;
-
+            std::cout<<is_tie(players, number_of_players)<<'\n';
 
             for (int i = 0;i < number_of_players;i++) {
                 //we move through the players and ask each one of them - r, c, f
@@ -922,6 +910,8 @@ int main() {
         }
 
     }
+    //we free the dynamic memory
+    delete[] players;
     return 0;
 
 }
